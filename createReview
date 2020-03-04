@@ -1,0 +1,76 @@
+<div class="createReviewDiv">
+    <div class="row"></div>
+    <h3 class="createReviewHeading">Create Review</h3>
+    <br>
+    <form>
+        <h4>Employee</h4>
+        <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">CGI Code:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12">
+                <input type="text" #cgiCode class="form-control input-medium" id="cgiCodeField" value="" maxlength="6"
+                #input (input)="input.value=$event.target.value.toUpperCase()">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">First Name:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12">
+                <input type="text" #firstName class="form-control input-medium" id="firstNameField" value="" readonly >
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">Last Name:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12">
+                <input type="text" #lastName class="form-control input-medium" id="lastNameField" value="" readonly >
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">Email:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12">
+                <input type="text" #email class="form-control input-medium" id="emailField" value="" readonly >
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">Reviewer:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12">
+            <input type="text" #reviewer class="form-control input-medium" value="" #searchBox id="search-box" (input)="search(searchBox.value)">
+                <ul class="search-result">
+                    <li *ngFor="let user of emp$ | async" >
+                      <a routerLink="/">
+                        {{emp.firstName}}
+                      </a>
+                    </li>
+                </ul> 
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">QA'er:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12">
+                <input type="text" #qaer class="form-control input-medium" value="">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">Cycle:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12">
+                <input type="text" #cycle class="form-control input-medium" value="">
+            </div>
+        </div>
+        <!-- <div class="row">
+            <label class="col-md-offset-2 col-md-2 col-sm-3 col-xs-12 control-label">Target Date:</label>
+            <div class="col-md-6 col-sm-9 col-xs-12 datepicker">
+                <input type="date" #targetDate class="form-control input-medium" value="">
+            </div>
+        </div> -->
+    
+        <div class="row">
+            <div class="col-md-2 col-sm-9 col-xs-12 col-md-offset-5 ">
+                <button type="button" class="btn btn-success" (click)="createReview()"> Create </button>
+            </div>
+        </div>
+    </form>
+</div>
