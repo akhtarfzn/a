@@ -1,0 +1,88 @@
+import os
+import shutil
+import json
+
+in_path = "E:/Rx_Claims/In"
+out_path = "E:/Rx_Claims/Out"
+archive_path = "E:/Rx_Claims/Archive"
+
+def index_in_list(a_list, index):
+    return index < len(a_list)
+
+for filename in os.listdir(in_path):
+   
+    file  = open(in_path+"/"+filename, "r") 
+
+    all_lines = file.readlines()
+    file_line_length = len(all_lines)
+    header_request = all_lines[1]
+    header_request_id = header_request.split()
+    header_date_temp = all_lines[2]
+    header_date = header_date_temp.split()
+    header_time_temp = all_lines[3]
+    header_time = header_time_temp.split()
+
+    footer_starting_line = file_line_length - 3
+    footer_input = all_lines[footer_starting_line]
+    footer_input_record = footer_input.split()
+
+    footer_line_number = footer_input_record[4]
+
+    footer_success_line_number = file_line_length - 2
+    footer_records_success = all_lines[footer_success_line_number]
+    footer_records_loaded = footer_records_success.split()
+    
+    footer_error_line_number = file_line_length - 1
+    footer_records_error = all_lines[footer_error_line_number]
+    footer_records_with_errors = footer_records_error.split()
+    
+    body_content_ending_line = int(footer_line_number) + 6
+    
+    json_content_list=[]
+    for x in range (6, body_content_ending_line):
+        # body_content = list (14)
+        body_content_temp = all_lines[x]
+        body_content = body_content_temp.split()
+        for index in range(14):
+            if not index_in_list(body_content, index):
+                body_content.append('')
+
+        json_data = {"BOOK": body_content[0],
+                "CARRIER":body_content[1],
+                "ACCOUNT ID":body_content[2],
+                "GROUP ID":body_content[3],
+                "MBR ID":body_content[4],
+                "LAST NAME":body_content[5],
+                "FIRST NAME":body_content[6],
+                "DOB":body_content[7],
+                "DED":body_content[8],
+                "OOP":body_content[9],
+                "STATUS":body_content[10],
+                "ERROR LOC":body_content[11],
+                "ERROR CODE":body_content[12],
+                "DESCRIPTION":body_content[13]}        
+
+        json_content_list.append(json_data)
+        json_content = {
+            "header" : {"Request ID": header_request_id[3] , "Date" : header_date[2] , "Time":  header_time[1]},
+            "data" : [ 
+                ],
+            "footer" : {"NUMBER OF INPUT RECORDS:" : footer_input_record[4] , "NUMBER OF RECORDS LOADED:" : footer_records_loaded[4] , "NUMBER OF RECORDS WITH ERRORS":  footer_records_with_errors[5]},
+        }
+        # json_content_list.append(json_content)
+    json_content['data'] = json_content_list
+    print(json_content)
+
+
+    json_content_final = json.dumps(json_content)
+    
+    filename_without_extension = os.path.splitext(filename)[0]
+    file_content = file.read()
+    file.close() 
+
+    file_json = open(out_path+"/"+filename_without_extension+".json", "w")
+    file_json.write(json_content_final)
+    file_json.close()
+
+    # shutil.move(in_path+"/"+filename, archive_path+"/"+filename)
+    
